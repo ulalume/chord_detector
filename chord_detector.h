@@ -85,10 +85,12 @@ namespace ChordDetector {
         // 6th chords
         {(1<<0)|(1<<4)|(1<<7)|(1<<9), "6",      78},   // Maj6: R,M3,P5,M6
         {(1<<0)|(1<<3)|(1<<7)|(1<<9), "m6",     78},   // Min6: R,m3,P5,M6
+        {(1<<0)|(1<<4)|(1<<7)|(1<<8), "6",      76},   // Maj6 alt: R,M3,P5,m6 (for E-G#-B-C = E6)
 
         // 6th chords omit5
         {(1<<0)|(1<<4)|(1<<9), "6(omit5)",      45},   // Maj6 omit5: R,M3,M6
         {(1<<0)|(1<<3)|(1<<9), "m6(omit5)",     45},   // Min6 omit5: R,m3,M6
+        {(1<<0)|(1<<4)|(1<<8), "6(omit5)",      44},   // Maj6 omit5 alt: R,M3,m6 (for E-G#-C)
 
         // Add11/Add4 chords (Enhanced patterns for C-E-F type chords)
         {(1<<0)|(1<<4)|(1<<5)|(1<<7), "add11",  65},   // Add11: R,M3,P4,P5 (same as add4)
@@ -111,6 +113,10 @@ namespace ChordDetector {
         {(1<<0)|(1<<3)|(1<<7), "m",      60},   // Minor: R,m3,P5
         {(1<<0)|(1<<4)|(1<<8), "+",      45},   // Aug: R,M3,m6
         {(1<<0)|(1<<3)|(1<<6), "o",      45},   // Dim: R,m3,b5
+
+        // Augmented 7th chords (NEW)
+        {(1<<0)|(1<<4)|(1<<8)|(1<<11), "+M7",   75},   // AugMaj7: R,M3,m6,M7
+        {(1<<0)|(1<<4)|(1<<8)|(1<<10), "+7",    75},   // Aug7: R,M3,m6,m7
 
         // Sus chords
         {(1<<0)|(1<<2)|(1<<7), "sus2",   40},   // Sus2: R,M2,P5
