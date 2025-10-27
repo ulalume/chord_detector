@@ -339,12 +339,12 @@ void test_common_progressions() {
     // Jazz ii-V-I with 7th chords
     result.assert_equal("Dm7", get_chord_name({62, 65, 69, 72}), "ii7 (Dm7) basic");
     result.assert_equal("G7", get_chord_name({67, 71, 74, 77}), "V7 (G7) basic");
-    result.assert_equal("Cmaj7", get_chord_name({60, 64, 67, 71}), "Imaj7 (Cmaj7) basic");
+    result.assert_equal("CM7", get_chord_name({60, 64, 67, 71}), "IM7 (CM7) basic");
 
     // Same with inversions
     result.assert_equal("F6", get_chord_name({65, 69, 72, 74}, false, true), "F6 (Dm7/F equivalent) slash");
     result.assert_equal("G7/B", get_chord_name({71, 74, 77, 79}, false, true), "V7/3 (G7/B) slash");
-    result.assert_equal("Cmaj7", get_chord_name({60, 64, 67, 71}, false, true), "Imaj7 (Cmaj7) slash");
+    result.assert_equal("CM7", get_chord_name({60, 64, 67, 71}, false, true), "IM7 (CM7) slash");
 }
 
 void test_omit5_and_add11_patterns() {
@@ -358,7 +358,7 @@ void test_omit5_and_add11_patterns() {
 
     // Additional omit5 tests
     result.assert_equal("C7(omit5)", get_chord_name({60, 64, 70}), "C-E-Bb (C7 omit5)");
-    result.assert_equal("Cmaj7(omit5)", get_chord_name({60, 64, 71}), "C-E-B (Cmaj7 omit5)");
+    result.assert_equal("CM7(omit5)", get_chord_name({60, 64, 71}), "C-E-B (CM7 omit5)");
     result.assert_equal("Cm7(omit5)", get_chord_name({60, 63, 70}), "C-Eb-Bb (Cm7 omit5)");
 
     // Test add11 with 5th present
@@ -367,7 +367,7 @@ void test_omit5_and_add11_patterns() {
 
     // Test 9th omit5 chords
     result.assert_equal("C9(omit5)", get_chord_name({60, 62, 64, 70}), "C-D-E-Bb (C9 omit5)");
-    result.assert_equal("Cmaj9(omit5)", get_chord_name({60, 62, 64, 71}), "C-D-E-B (Cmaj9 omit5)");
+    result.assert_equal("CM9(omit5)", get_chord_name({60, 62, 64, 71}), "C-D-E-B (Cmaj9 omit5)");
 
     // Test 6th omit5 chords
     result.assert_equal("C6(omit5)", get_chord_name({60, 64, 69}), "C-E-A (C6 omit5)");
@@ -383,6 +383,10 @@ void test_omit5_and_add11_patterns() {
     result.assert_equal("C", get_chord_name({60, 64}), "C-E (major third only)");
     result.assert_equal("Csus4(omit5)", get_chord_name({60, 65}), "C-F (perfect fourth only)");
     result.assert_equal("Dm", get_chord_name({62, 65}), "D-F (minor third only)");
+
+    // Test maj7sus4 patterns (NEW - fixes ド、ファ、ソ、シ issue)
+    result.assert_equal("CM7sus4", get_chord_name({60, 65, 67, 71}), "C-F-G-B (CM7sus4)");
+    result.assert_equal("CM7sus2", get_chord_name({60, 62, 67, 71}), "C-D-G-B (CM7sus2)");
 }
 
 int main() {
