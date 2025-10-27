@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/chord_detector-targets.cmake")
+
+check_required_components(chord_detector)

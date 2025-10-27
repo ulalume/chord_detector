@@ -1,0 +1,36 @@
+# Build directories
+build/
+cmake-build-*/
+
+# Compiled binaries
+*.exe
+*.out
+*.app
+chord_detector_test
+test
+
+# Object files
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+!*-config.cmake.in
+
+# IDE files
+.vscode/
+.idea/
+*.vcxproj*
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
