@@ -127,11 +127,11 @@ void test_legacy_compatibility() {
     std::cout << "\n--- Legacy Function Compatibility ---" << std::endl;
 
     // Test legacy get_slash_chord_name functions
-    result.assert_equal("C/E", get_slash_chord_name({64, 67, 72}), "Legacy get_slash_chord_name");
-    result.assert_equal("G7/B", get_slash_chord_name({71, 74, 77, 79}), "Legacy G7/B");
+    result.assert_equal("C/E", get_chord_name({64, 67, 72}, false, true), "Legacy get_slash_chord_name");
+    result.assert_equal("G7/B", get_chord_name({71, 74, 77, 79}), "Legacy G7/B");
 
     // Test legacy analyze_slash_chord functions
-    ChordResult legacy_result = analyze_slash_chord({64, 67, 72});
+    ChordResult legacy_result = analyze_chord({64, 67, 72}, false, true);
     result.assert_equal("C/E", legacy_result.full_name, "Legacy analyze_slash_chord");
     result.assert_bool(true, legacy_result.is_slash_chord, "Legacy is_slash_chord");
 }
@@ -414,15 +414,15 @@ result.assert_equal("G+M7", get_chord_name({67, 71, 75, 78}), "G+M7 (G-B-D#-F#)"
 
 void test_additional_sus_chords() {
     std::cout << "\n--- Additional Sus Chord Pattern Tests ---" << std::endl;
-    
+
     // Test the new patterns added for the reported issues
     result.assert_equal("CM7sus4(omit5)", get_chord_name({60, 65, 71}), "C-F-B (CM7sus4 omit5)");
     result.assert_equal("CM7sus2sus4", get_chord_name({60, 62, 65, 71}), "C-D-F-B (CM7sus2sus4)");
-    
+
     // Test with different roots
     result.assert_equal("DM7sus4(omit5)", get_chord_name({62, 67, 73}), "D-G-C# (DM7sus4 omit5)");
     result.assert_equal("GM7sus2sus4", get_chord_name({67, 69, 72, 78}), "G-A-C-F# (GM7sus2sus4)");
-    
+
     // Test slash chord versions
     result.assert_equal("CM7sus4(omit5)", get_chord_name({60, 65, 71}, false, true), "C-F-B with slash enabled");
 }
