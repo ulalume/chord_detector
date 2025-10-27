@@ -9,6 +9,15 @@ project(chord_detector
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Set optimization flags for better performance
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  target_compile_options(chord_detector INTERFACE -O3)
+endif()
+
 # Create interface library for header-only usage
 add_library(chord_detector INTERFACE)
 add_library(chord_detector::chord_detector ALIAS chord_detector)
@@ -54,6 +63,11 @@ install(FILES
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   add_executable(chord_detector_test test.cpp)
   target_link_libraries(chord_detector_test chord_detector::chord_detector)
+
+  # Apply optimization flags to test executable as well
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_options(chord_detector_test PRIVATE -O3)
+  endif()
 
   enable_testing()
   add_test(NAME chord_detector_test COMMAND chord_detector_test)
