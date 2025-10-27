@@ -14,10 +14,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  target_compile_options(chord_detector INTERFACE -O3)
-endif()
-
 # Create interface library for header-only usage
 add_library(chord_detector INTERFACE)
 add_library(chord_detector::chord_detector ALIAS chord_detector)
@@ -26,6 +22,9 @@ add_library(chord_detector::chord_detector ALIAS chord_detector)
 target_include_directories(chord_detector INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>)
+
+# Set compile features for optimization (more portable than direct flags)
+target_compile_features(chord_detector INTERFACE cxx_std_17)
 
 # Install header file
 install(FILES chord_detector.h
@@ -64,9 +63,12 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   add_executable(chord_detector_test test.cpp)
   target_link_libraries(chord_detector_test chord_detector::chord_detector)
 
-  # Apply optimization flags to test executable as well
+  # Apply optimization flags to test executable for Release builds
   if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(chord_detector_test PRIVATE -O3)
+    target_compile_options(chord_detector_test PRIVATE
+      $<$<CXX_COMPILER_ID:GNU>:-O3>
+      $<$<CXX_COMPILER_ID:Clang>:-O3>
+      $<$<CXX_COMPILER_ID:MSVC>:/O2>)
   endif()
 
   enable_testing()
