@@ -128,8 +128,10 @@ namespace ChordDetector {
         {(1<<0)|(1<<5)|(1<<7), "sus4",   40},   // Sus4: R,P4,P5
         {(1<<0)|(1<<2)|(1<<5), "sus2sus4", 30}, // Sus2sus4: R,M2,P4 (rare but possible)
 
-        // Extended sus chords for C-F-A-B type combinations
+        // Extended sus chords
         {(1<<0)|(1<<5)|(1<<9)|(1<<11), "M7sus4add6", 45}, // Sus4 with added 6th and M7: R,P4,M6,M7
+        {(1<<0)|(1<<5)|(1<<11), "M7sus4(omit5)", 42}, // Sus4 with M7, no 5th: R,P4,M7 (C-F-B)
+        {(1<<0)|(1<<2)|(1<<5)|(1<<11), "M7sus2sus4", 40}, // Sus2+Sus4 with M7: R,M2,P4,M7 (C-D-F-B)
 
         // Special case patterns for slash chord detection
         {(1<<0)|(1<<2)|(1<<5), "?",      35},   // R,M2,P4 - ambiguous, needs slash analysis ← C-D-F case
