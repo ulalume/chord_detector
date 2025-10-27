@@ -46,7 +46,7 @@ namespace ChordDetector {
         {(1<<0)|(1<<2)|(1<<4)|(1<<5)|(1<<7)|(1<<10), "11",     100},  // Dom11: R,M2,M3,P4,P5,m7
         {(1<<0)|(1<<2)|(1<<4)|(1<<5)|(1<<7)|(1<<11), "maj11",  100},  // Maj11: R,M2,M3,P4,P5,M7
         {(1<<0)|(1<<2)|(1<<3)|(1<<5)|(1<<7)|(1<<10), "m11",    100},  // Min11: R,M2,m3,P4,P5,m7
-        
+
         // 11th chords omit5
         {(1<<0)|(1<<2)|(1<<4)|(1<<5)|(1<<10), "11(omit5)",     95},   // Dom11 omit5: R,M2,M3,P4,m7
         {(1<<0)|(1<<2)|(1<<4)|(1<<5)|(1<<11), "maj11(omit5)",  95},   // Maj11 omit5: R,M2,M3,P4,M7
@@ -122,8 +122,8 @@ namespace ChordDetector {
 
         // Power chords and incomplete
         {(1<<0)|(1<<7), "5",      30},   // Power: R,P5
-        {(1<<0)|(1<<5), "sus4(no5)", 25}, // Just R,P4 (sus4 without 5th)
-        {(1<<0)|(1<<2), "sus2(no5)", 25}, // Just R,M2 (sus2 without 5th)
+        {(1<<0)|(1<<5), "sus4(omit5)", 25}, // Just R,P4 (sus4 without 5th)
+        {(1<<0)|(1<<2), "sus2(omit5)", 25}, // Just R,M2 (sus2 without 5th)
         {(1<<0)|(1<<4), "",       20},   // Just R,M3
         {(1<<0)|(1<<3), "m",      20},   // Just R,m3
     };
@@ -164,7 +164,7 @@ namespace ChordDetector {
     }
 
     // Enhanced slash chord analysis
-    inline ChordResult analyze_for_slash_chord(const int* midi_notes, int note_count, 
+    inline ChordResult analyze_for_slash_chord(const int* midi_notes, int note_count,
                                              int bass_pitch_class, const char* const* note_names) {
         ChordResult best_result = {"", "", "", false, -1, -1};
         int best_priority = -1;
@@ -181,12 +181,12 @@ namespace ChordDetector {
             for (int i = 0; i < note_count; ++i) {
                 int midi = midi_notes[i];
                 if (midi < 0 || midi > 127) continue;
-                
+
                 int pc = midi % 12;
                 int interval = (pc - root_candidate + 12) % 12;
-                
+
                 if (interval == 0) has_root = true;
-                
+
                 // Add interval if not already present
                 bool already_present = false;
                 for (int j = 0; j < interval_count; ++j) {
@@ -208,11 +208,11 @@ namespace ChordDetector {
             // Find best pattern match for this root
             for (size_t p = 0; p < NUM_PATTERNS; ++p) {
                 const ChordPattern& pattern = CHORD_PATTERNS[p];
-                
+
                 if (pattern.mask == mask && pattern.priority > best_priority) {
                     std::string root_name = note_names[root_candidate];
                     std::string bass_name = note_names[bass_pitch_class];
-                    
+
                     // Special handling for ambiguous patterns
                     if (strcmp(pattern.name, "?") == 0) {
                         // For C-D-F (intervals 0,2,5 from C), this should be Dm/C
@@ -220,7 +220,7 @@ namespace ChordDetector {
                             // Check if it forms a minor chord from the second note
                             int second_note = (bass_pitch_class + 2) % 12; // D if bass is C
                             bool forms_minor = true;
-                            
+
                             // Verify D-F (minor third) exists
                             for (int i = 0; i < note_count; ++i) {
                                 int pc = midi_notes[i] % 12;
@@ -240,7 +240,7 @@ namespace ChordDetector {
                         }
                         continue;
                     }
-                    
+
                     best_result = {
                         root_name + pattern.name + "/" + bass_name,
                         root_name + pattern.name,
@@ -289,12 +289,12 @@ ChordResult analyze_chord(const int* midi_notes, int note_count, bool use_flats 
         for (int i = 0; i < note_count; ++i) {
             int midi = midi_notes[i];
             if (midi < 0 || midi > 127) continue;
-            
+
             int pc = midi % 12;
             int interval = (pc - root_candidate + 12) % 12;
-            
+
             if (interval == 0) has_root = true;
-            
+
             // Add interval if not already present
             bool already_present = false;
             for (int j = 0; j < interval_count; ++j) {
@@ -316,11 +316,11 @@ ChordResult analyze_chord(const int* midi_notes, int note_count, bool use_flats 
         // Find best pattern match
         for (size_t p = 0; p < ChordDetector::NUM_PATTERNS; ++p) {
             const ChordDetector::ChordPattern& pattern = ChordDetector::CHORD_PATTERNS[p];
-            
+
             if (pattern.mask != mask) continue;
 
             int priority = pattern.priority;
-            
+
             // Bonus for root position (root = bass)
             if (root_candidate == bass_pitch_class) {
                 priority += 30;
@@ -329,9 +329,9 @@ ChordResult analyze_chord(const int* midi_notes, int note_count, bool use_flats 
             if (priority > best_priority) {
                 std::string root_name = note_names[root_candidate];
                 std::string bass_name = note_names[bass_pitch_class];
-                
+
                 bool is_slash = (root_candidate != bass_pitch_class) && use_slash;
-                
+
                 result = {
                     is_slash ? root_name + pattern.name + "/" + bass_name : root_name + pattern.name,
                     root_name + pattern.name,
@@ -349,7 +349,7 @@ ChordResult analyze_chord(const int* midi_notes, int note_count, bool use_flats 
     if (use_slash && best_priority < 50) { // If no good root position match found
         ChordResult slash_result = ChordDetector::analyze_for_slash_chord(
             midi_notes, note_count, bass_pitch_class, note_names);
-        
+
         if (!slash_result.full_name.empty()) {
             result = slash_result;
         }
@@ -448,7 +448,7 @@ ChordResult analyze_slash_chord(const int (&midi_notes)[N], bool use_flats = fal
 // Inversion type detection helper
 inline std::string get_inversion_type(const ChordResult& chord) {
     if (!chord.is_slash_chord) return "root";
-    
+
     int interval = (chord.bass_pitch_class - chord.root_pitch_class + 12) % 12;
     switch (interval) {
         case 0: return "root";
