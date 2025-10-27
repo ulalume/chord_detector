@@ -421,51 +421,6 @@ std::string get_chord_name(const int (&midi_notes)[N], bool use_flats = false, b
     return get_chord_name(midi_notes, static_cast<int>(N), use_flats, use_slash);
 }
 
-// Legacy compatibility functions
-std::string get_slash_chord_name(const int* midi_notes, int note_count, bool use_flats = false) {
-    return get_chord_name(midi_notes, note_count, use_flats, true);
-}
-
-std::string get_slash_chord_name(const std::vector<int>& midi_notes, bool use_flats = false) {
-    return get_chord_name(midi_notes, use_flats, true);
-}
-
-std::string get_slash_chord_name(std::initializer_list<int> midi_notes, bool use_flats = false) {
-    return get_chord_name(midi_notes, use_flats, true);
-}
-
-template<size_t N>
-std::string get_slash_chord_name(const std::array<int, N>& midi_notes, bool use_flats = false) {
-    return get_chord_name(midi_notes, use_flats, true);
-}
-
-template<size_t N>
-std::string get_slash_chord_name(const int (&midi_notes)[N], bool use_flats = false) {
-    return get_chord_name(midi_notes, use_flats, true);
-}
-
-ChordResult analyze_slash_chord(const int* midi_notes, int note_count, bool use_flats = false) {
-    return analyze_chord(midi_notes, note_count, use_flats, true);
-}
-
-ChordResult analyze_slash_chord(const std::vector<int>& midi_notes, bool use_flats = false) {
-    return analyze_chord(midi_notes, use_flats, true);
-}
-
-ChordResult analyze_slash_chord(std::initializer_list<int> midi_notes, bool use_flats = false) {
-    return analyze_chord(midi_notes, use_flats, true);
-}
-
-template<size_t N>
-ChordResult analyze_slash_chord(const std::array<int, N>& midi_notes, bool use_flats = false) {
-    return analyze_chord(midi_notes, use_flats, true);
-}
-
-template<size_t N>
-ChordResult analyze_slash_chord(const int (&midi_notes)[N], bool use_flats = false) {
-    return analyze_chord(midi_notes, use_flats, true);
-}
-
 // Inversion type detection helper
 inline std::string get_inversion_type(const ChordResult& chord) {
     if (!chord.is_slash_chord) return "root";
