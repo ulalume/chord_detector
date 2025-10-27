@@ -128,7 +128,7 @@ void test_legacy_compatibility() {
 
     // Test legacy get_slash_chord_name functions
     result.assert_equal("C/E", get_chord_name({64, 67, 72}, false, true), "Legacy get_slash_chord_name");
-    result.assert_equal("G7/B", get_chord_name({71, 74, 77, 79}), "Legacy G7/B");
+    result.assert_equal("G7/B", get_chord_name({71, 74, 77, 79}, false, true), "Legacy G7/B");
 
     // Test legacy analyze_slash_chord functions
     ChordResult legacy_result = analyze_chord({64, 67, 72}, false, true);
@@ -393,23 +393,23 @@ void test_augmented_chords() {
 std::cout << "\n--- Augmented Chord Tests ---" << std::endl;
 
 // Basic augmented triads
-result.assert_equal("C+", get_chord_name({60, 64, 68}), "C+ (C-E-G#)");
-result.assert_equal("D+", get_chord_name({62, 66, 70}), "D+ (D-F#-A#)");
-result.assert_equal("E+", get_chord_name({64, 68, 72}), "E+ (E-G#-C)");
+result.assert_equal("Caug", get_chord_name({60, 64, 68}), "C+ (C-E-G#)");
+result.assert_equal("Daug", get_chord_name({62, 66, 70}), "D+ (D-F#-A#)");
+result.assert_equal("Eaug", get_chord_name({64, 68, 72}), "E+ (E-G#-C)");
 
 // Augmented 7th chords
-result.assert_equal("C+7", get_chord_name({60, 64, 68, 70}), "C+7 (C-E-G#-Bb)");
-result.assert_equal("C+M7", get_chord_name({60, 64, 68, 71}), "C+M7 (C-E-G#-B)");
+result.assert_equal("Caug7", get_chord_name({60, 64, 68, 70}), "C+7 (C-E-G#-Bb)");
+result.assert_equal("CaugM7", get_chord_name({60, 64, 68, 71}), "C+M7 (C-E-G#-B)");
 
 // Test ド、ミ、ソ#、シ issue - should be C+M7
-result.assert_equal("C+M7", get_chord_name({60, 64, 68, 71}), "ド、ミ、ソ#、シ (C+M7)");
+result.assert_equal("CaugM7", get_chord_name({60, 64, 68, 71}), "ド、ミ、ソ#、シ (C+M7)");
 
 // Alternative interpretation as E6 when E is bass
 result.assert_equal("E6", get_chord_name({52, 60, 68, 71}), "E6 with E bass (E-C-G#-B)");
 
 // More augmented 7th variations
-result.assert_equal("F+7", get_chord_name({65, 69, 73, 75}), "F+7 (F-A-C#-Eb)");
-result.assert_equal("G+M7", get_chord_name({67, 71, 75, 78}), "G+M7 (G-B-D#-F#)");
+result.assert_equal("Faug7", get_chord_name({65, 69, 73, 75}), "F+7 (F-A-C#-Eb)");
+result.assert_equal("GaugM7", get_chord_name({67, 71, 75, 78}), "G+M7 (G-B-D#-F#)");
 }
 
 void test_additional_sus_chords() {
@@ -427,6 +427,20 @@ void test_additional_sus_chords() {
     result.assert_equal("CM7sus4(omit5)", get_chord_name({60, 65, 71}, false, true), "C-F-B with slash enabled");
 }
 
+void test_new_chord_patterns() {
+    std::cout << "\n--- New Chord Pattern Tests ---" << std::endl;
+    
+    // Test the new patterns added for the latest requests
+    result.assert_equal("Cm(add#11)", get_chord_name({60, 63, 66, 67}), "C-D#-F#-G (Cm add#11)");
+    result.assert_equal("CM7#11", get_chord_name({60, 63, 66, 71}), "C-D#-F#-B (CM7#11)");
+    
+    // Test with different roots
+    result.assert_equal("Dm(add#11)", get_chord_name({62, 65, 68, 69}), "D-F-G#-A (Dm add#11)");
+    result.assert_equal("FM7#11", get_chord_name({65, 68, 71, 76}), "F-G#-B-E (FM7#11)");
+    
+    // Test slash chord versions
+    result.assert_equal("Cm(add#11)", get_chord_name({60, 63, 66, 67}, false, true), "C-D#-F#-G with slash enabled");
+}
 
 
 int main() {
@@ -448,6 +462,7 @@ int main() {
     test_omit5_and_add11_patterns();
     test_augmented_chords();
     test_additional_sus_chords();
+    test_new_chord_patterns();
 
     test_performance();
 
