@@ -82,6 +82,10 @@ namespace ChordDetector {
         {(1<<0)|(1<<3)|(1<<10), "m7(omit5)",     72},   // Min7 omit5: R,m3,m7
         {(1<<0)|(1<<3)|(1<<11), "mM7(omit5)",    72},   // MinMaj7 omit5: R,m3,M7
 
+        // 6/9 chords (6th with added 9th)
+        {(1<<0)|(1<<2)|(1<<4)|(1<<7)|(1<<9), "69",    88},   // 6/9: R,M2,M3,P5,M6
+        {(1<<0)|(1<<2)|(1<<3)|(1<<7)|(1<<9), "m69",   88},   // Min6/9: R,M2,m3,P5,M6
+
         // 6th chords
         {(1<<0)|(1<<4)|(1<<7)|(1<<9), "6",      78},   // Maj6: R,M3,P5,M6
         {(1<<0)|(1<<3)|(1<<7)|(1<<9), "m6",     78},   // Min6: R,m3,P5,M6
@@ -113,8 +117,9 @@ namespace ChordDetector {
         {(1<<0)|(1<<3)|(1<<7), "m",      60},   // Minor: R,m3,P5
         {(1<<0)|(1<<4)|(1<<8), "+",      45},   // Aug: R,M3,m6
         {(1<<0)|(1<<3)|(1<<6), "o",      45},   // Dim: R,m3,b5
+        {(1<<0)|(1<<4)|(1<<6), "b5",     50},   // Flat 5: R,M3,b5
 
-        // Augmented 7th chords (NEW)
+        // Augmented 7th chords
         {(1<<0)|(1<<4)|(1<<8)|(1<<11), "+M7",   75},   // AugMaj7: R,M3,m6,M7
         {(1<<0)|(1<<4)|(1<<8)|(1<<10), "+7",    75},   // Aug7: R,M3,m6,m7
 
@@ -122,6 +127,9 @@ namespace ChordDetector {
         {(1<<0)|(1<<2)|(1<<7), "sus2",   40},   // Sus2: R,M2,P5
         {(1<<0)|(1<<5)|(1<<7), "sus4",   40},   // Sus4: R,P4,P5
         {(1<<0)|(1<<2)|(1<<5), "sus2sus4", 30}, // Sus2sus4: R,M2,P4 (rare but possible)
+
+        // Extended sus chords for C-F-A-B type combinations
+        {(1<<0)|(1<<5)|(1<<9)|(1<<11), "M7sus4add6", 45}, // Sus4 with added 6th and M7: R,P4,M6,M7
 
         // Special case patterns for slash chord detection
         {(1<<0)|(1<<2)|(1<<5), "?",      35},   // R,M2,P4 - ambiguous, needs slash analysis ← C-D-F case
@@ -352,17 +360,22 @@ ChordResult analyze_chord(const int* midi_notes, int note_count, bool use_flats 
     }
 
     // Enhanced slash chord analysis for special cases
-    if (use_slash && best_priority < 50) { // If no good root position match found
+    if (use_slash) {
         ChordResult slash_result = ChordDetector::analyze_for_slash_chord(
             midi_notes, note_count, bass_pitch_class, note_names);
 
-        if (!slash_result.full_name.empty()) {
+        // Use slash result if it has higher priority or if no root position found
+        if (!slash_result.full_name.empty() &&
+            (slash_result.root_pitch_class != slash_result.bass_pitch_class) &&
+            best_priority < 50) {
             result = slash_result;
         }
     }
 
     return result;
 }
+
+
 
 // Simple chord name function
 std::string get_chord_name(const int* midi_notes, int note_count, bool use_flats = false, bool use_slash = false) {

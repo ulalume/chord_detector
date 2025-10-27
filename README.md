@@ -18,7 +18,7 @@ High-performance C++17 header-only library for detecting chord names from MIDI n
 // Basic chord detection
 std::string chord = get_chord_name({60, 64, 67}); // "C"
 
-// Enhanced omit5 detection (NEW)
+// Enhanced omit5 detection
 std::string omit5 = get_chord_name({60, 64, 65}); // "Cadd11(omit5)"
 
 // Slash chord detection
@@ -31,6 +31,8 @@ ChordResult result = analyze_chord({64, 67, 72}, false, true);
 // Detailed analysis with inversions
 DetailedAnalysis detailed = get_detailed_analysis({67, 71, 74, 77});
 // detailed.inversion_type = "1st", detailed.note_names = {"G", "B", "D", "F"}
+
+
 ```
 
 ## CMake Integration
@@ -55,6 +57,7 @@ target_link_libraries(your_target chord_detector::chord_detector)
 - `analyze_chord(notes, use_flats=false, use_slash=false)` → ChordResult
 - `get_detailed_analysis(notes, use_flats=false)` → DetailedAnalysis
 
+
 ### Parameters
 - `notes`: MIDI note numbers (C4=60)
 - `use_flats`: Use flat notation (Db vs C#)
@@ -64,8 +67,11 @@ target_link_libraries(your_target chord_detector::chord_detector)
 - **Triads**: C, Cm, C+, Co, Csus2, Csus4
 - **7ths**: C7, Cmaj7, Cm7, CmM7, C7b5, Cm7b5, Co7
 - **Extended**: C6, Cm6, Cadd9, C9, Cmaj9, C11, Cmaj11
+- **6/9 Chords**: C69, Cm69 (NEW)
 - **omit5 (NEW)**: C7(omit5), Cmaj7(omit5), Cadd11(omit5)
+- **Flat 5**: Cb5 (NEW)
 - **Slash/Inversions**: C/E, Am/C, G7/B, Dm7(omit5)/C
+
 
 ## License
 

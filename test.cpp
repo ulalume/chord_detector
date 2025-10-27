@@ -383,34 +383,36 @@ void test_omit5_and_add11_patterns() {
     result.assert_equal("C", get_chord_name({60, 64}), "C-E (major third only)");
     result.assert_equal("Csus4(omit5)", get_chord_name({60, 65}), "C-F (perfect fourth only)");
     result.assert_equal("Dm", get_chord_name({62, 65}), "D-F (minor third only)");
-    
-// Test M7sus4 patterns (NEW - fixes ド、ファ、ソ、シ issue)
+
+// Test M7sus4 patterns
 result.assert_equal("CM7sus4", get_chord_name({60, 65, 67, 71}), "C-F-G-B (CM7sus4)");
 result.assert_equal("CM7sus2", get_chord_name({60, 62, 67, 71}), "C-D-G-B (CM7sus2)");
 }
 
 void test_augmented_chords() {
 std::cout << "\n--- Augmented Chord Tests ---" << std::endl;
-    
+
 // Basic augmented triads
 result.assert_equal("C+", get_chord_name({60, 64, 68}), "C+ (C-E-G#)");
 result.assert_equal("D+", get_chord_name({62, 66, 70}), "D+ (D-F#-A#)");
 result.assert_equal("E+", get_chord_name({64, 68, 72}), "E+ (E-G#-C)");
-    
-// Augmented 7th chords (NEW)
+
+// Augmented 7th chords
 result.assert_equal("C+7", get_chord_name({60, 64, 68, 70}), "C+7 (C-E-G#-Bb)");
 result.assert_equal("C+M7", get_chord_name({60, 64, 68, 71}), "C+M7 (C-E-G#-B)");
-    
+
 // Test ド、ミ、ソ#、シ issue - should be C+M7
 result.assert_equal("C+M7", get_chord_name({60, 64, 68, 71}), "ド、ミ、ソ#、シ (C+M7)");
-    
+
 // Alternative interpretation as E6 when E is bass
 result.assert_equal("E6", get_chord_name({52, 60, 68, 71}), "E6 with E bass (E-C-G#-B)");
-    
+
 // More augmented 7th variations
 result.assert_equal("F+7", get_chord_name({65, 69, 73, 75}), "F+7 (F-A-C#-Eb)");
 result.assert_equal("G+M7", get_chord_name({67, 71, 75, 78}), "G+M7 (G-B-D#-F#)");
 }
+
+
 
 int main() {
     std::cout << "🎵 Unified Chord Detector - Comprehensive Test Suite 🎵" << std::endl;
@@ -430,6 +432,7 @@ int main() {
     test_common_progressions();
     test_omit5_and_add11_patterns();
     test_augmented_chords();
+
     test_performance();
 
     // Print final results
